@@ -1,10 +1,12 @@
 package com.xmz.netty.client;
 
-import com.xmz.netty.protocol.PacketCodeC;
+import com.xmz.netty.client.handler.LoginResponseHandler;
+import com.xmz.netty.client.handler.MessageResponseHandler;
+import com.xmz.netty.codec.PacketDecoder;
+import com.xmz.netty.codec.PacketEncoder;
 import com.xmz.netty.protocol.request.MessageRequestPacket;
 import com.xmz.netty.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -40,7 +42,10 @@ public class NettyClient {
 						.handler(new ChannelInitializer<SocketChannel>() {
 								@Override
 								protected void initChannel(SocketChannel ch) throws Exception {
-										ch.pipeline().addLast(new ClientLoginHandler());
+										ch.pipeline().addLast(new PacketDecoder());
+										ch.pipeline().addLast(new LoginResponseHandler());
+										ch.pipeline().addLast(new MessageResponseHandler());
+										ch.pipeline().addLast(new PacketEncoder());
 								}
 						});
 				connect(bootstrap, HOST, PORT, MAX_RETRY);
@@ -76,8 +81,7 @@ public class NettyClient {
 
 										MessageRequestPacket packet = new MessageRequestPacket();
 										packet.setMessage(line);
-										ByteBuf byteBuf = PacketCodeC.instance.encode(channel.alloc(), packet);
-										channel.writeAndFlush(byteBuf);
+										channel.writeAndFlush(packet);
 								}
 						}
 				}).start();

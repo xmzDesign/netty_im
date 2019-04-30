@@ -1,8 +1,10 @@
 package com.xmz.netty.server;
 
+import com.xmz.netty.codec.PacketDecoder;
+import com.xmz.netty.codec.PacketEncoder;
+import com.xmz.netty.server.handler.LoginRequestHandler;
+import com.xmz.netty.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -35,10 +37,10 @@ public class NettyServer {
 						.childHandler(new ChannelInitializer<NioSocketChannel>() {
 								@Override
 								protected void initChannel(NioSocketChannel ch) {
-//										ch.pipeline().addLast(new ServerLoginHandler());
-										ch.pipeline().addLast(new InBoundHandlerA());
-										ch.pipeline().addLast(new InBoundHandlerB());
-										ch.pipeline().addLast(new InBoundHandlerC());
+										ch.pipeline().addLast(new PacketDecoder());
+										ch.pipeline().addLast(new LoginRequestHandler());
+										ch.pipeline().addLast(new MessageRequestHandler());
+										ch.pipeline().addLast(new PacketEncoder());
 								}
 						});
 
@@ -47,30 +49,6 @@ public class NettyServer {
 
 		}
 
-
-		public static class InBoundHandlerA extends ChannelInboundHandlerAdapter {
-				@Override
-				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-						System.out.println("InBoundHandlerA: " + msg);
-						super.channelRead(ctx, msg);
-				}
-		}
-
-		public static class InBoundHandlerB extends ChannelInboundHandlerAdapter {
-				@Override
-				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-						System.out.println("InBoundHandlerB: " + msg);
-						super.channelRead(ctx, msg);
-				}
-		}
-
-		public static class InBoundHandlerC extends ChannelInboundHandlerAdapter {
-				@Override
-				public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-						System.out.println("InBoundHandlerC: " + msg);
-						super.channelRead(ctx, msg);
-				}
-		}
 
 		private static void bind(final ServerBootstrap serverBootstrap, final int port) {
 				serverBootstrap.bind(port).addListener(future -> {
