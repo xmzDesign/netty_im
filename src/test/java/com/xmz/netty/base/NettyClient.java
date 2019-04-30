@@ -5,6 +5,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
 /**
  * @author Xu.Minzhe
@@ -28,10 +29,12 @@ public class NettyClient {
 						.handler(new ChannelInitializer<SocketChannel>() {
 								@Override
 								public void initChannel(SocketChannel ch) {
+										ch.pipeline().addLast(new LengthFieldBasedFrameDecoder(Integer.MAX_VALUE, 7, 4));
+										ch.pipeline().addLast(new FirstClientHandler());
 								}
 						});
 				// 4.建立连接
-				bootstrap.connect("juejin.im", 80).addListener(future -> {
+				bootstrap.connect("127.0.0.1", 8000).addListener(future -> {
 						if (future.isSuccess()) {
 								System.out.println("连接成功!");
 						} else {
