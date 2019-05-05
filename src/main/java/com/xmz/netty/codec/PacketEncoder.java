@@ -18,6 +18,6 @@ public class PacketEncoder extends MessageToByteEncoder<Packet> {
 
 		@Override
 		protected void encode(ChannelHandlerContext ctx, Packet msg, ByteBuf out) throws Exception {
-				PacketCodeC.instance.encode(out, msg);
+				PacketCodeC.INSTANCE.encode(out, msg);
 		}
 }

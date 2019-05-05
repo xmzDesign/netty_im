@@ -18,6 +18,6 @@ public class PacketDecoder extends ByteToMessageDecoder {
 
 		@Override
 		protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
-				out.add(PacketCodeC.instance.decode(in));
+				out.add(PacketCodeC.INSTANCE.decode(in));
 		}
 }
