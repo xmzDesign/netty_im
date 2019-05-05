@@ -3,6 +3,7 @@ package com.xmz.netty.client;
 import com.xmz.netty.client.console.ConsoleCommandManager;
 import com.xmz.netty.client.console.LoginConsoleCommand;
 import com.xmz.netty.client.handler.CreateGroupResponseHandler;
+import com.xmz.netty.client.handler.GroupMessageResponseHandler;
 import com.xmz.netty.client.handler.JoinGroupResponseHandler;
 import com.xmz.netty.client.handler.ListGroupMembersResponseHandler;
 import com.xmz.netty.client.handler.LoginResponseHandler;
@@ -63,6 +64,8 @@ public class NettyClient {
 										ch.pipeline().addLast(new QuitGroupResponseHandler());
 										// 获取群成员响应处理器
 										ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+										// 群消息
+										ch.pipeline().addLast(new GroupMessageResponseHandler());
 										// 登出响应处理器
 										ch.pipeline().addLast(new LogoutResponseHandler());
 										ch.pipeline().addLast(new PacketEncoder());
