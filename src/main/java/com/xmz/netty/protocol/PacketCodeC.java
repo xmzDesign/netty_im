@@ -2,25 +2,36 @@ package com.xmz.netty.protocol;
 
 import static com.xmz.netty.protocol.command.Command.CREATE_GROUP_REQUEST;
 import static com.xmz.netty.protocol.command.Command.CREATE_GROUP_RESPONSE;
+import static com.xmz.netty.protocol.command.Command.JOIN_GROUP_REQUEST;
+import static com.xmz.netty.protocol.command.Command.JOIN_GROUP_RESPONSE;
+import static com.xmz.netty.protocol.command.Command.LIST_GROUP_MEMBERS_REQUEST;
+import static com.xmz.netty.protocol.command.Command.LIST_GROUP_MEMBERS_RESPONSE;
 import static com.xmz.netty.protocol.command.Command.LOGIN_REQUEST;
 import static com.xmz.netty.protocol.command.Command.LOGIN_RESPONSE;
 import static com.xmz.netty.protocol.command.Command.LOGOUT_REQUEST;
 import static com.xmz.netty.protocol.command.Command.LOGOUT_RESPONSE;
 import static com.xmz.netty.protocol.command.Command.MESSAGE_REQUEST;
 import static com.xmz.netty.protocol.command.Command.MESSAGE_RESPONSE;
+import static com.xmz.netty.protocol.command.Command.QUIT_GROUP_REQUEST;
+import static com.xmz.netty.protocol.command.Command.QUIT_GROUP_RESPONSE;
 
 import com.xmz.netty.protocol.request.CreateGroupRequestPacket;
+import com.xmz.netty.protocol.request.JoinGroupRequestPacket;
+import com.xmz.netty.protocol.request.ListGroupMembersRequestPacket;
 import com.xmz.netty.protocol.request.LoginRequestPacket;
 import com.xmz.netty.protocol.request.LogoutRequestPacket;
 import com.xmz.netty.protocol.request.MessageRequestPacket;
+import com.xmz.netty.protocol.request.QuitGroupRequestPacket;
 import com.xmz.netty.protocol.response.CreateGroupResponsePacket;
+import com.xmz.netty.protocol.response.JoinGroupResponsePacket;
+import com.xmz.netty.protocol.response.ListGroupMembersResponsePacket;
 import com.xmz.netty.protocol.response.LoginResponsePacket;
 import com.xmz.netty.protocol.response.LogoutResponsePacket;
 import com.xmz.netty.protocol.response.MessageResponsePacket;
+import com.xmz.netty.protocol.response.QuitGroupResponsePacket;
 import com.xmz.netty.serialize.Serializer;
 import com.xmz.netty.serialize.impl.JSONSerializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,6 +61,13 @@ public class PacketCodeC {
 				packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
 				packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
 				packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+				packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+				packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
+				packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
+				packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+				packetTypeMap.put(LIST_GROUP_MEMBERS_REQUEST, ListGroupMembersRequestPacket.class);
+				packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
+
 
 
 				serializerMap = new HashMap<>();

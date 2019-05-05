@@ -3,15 +3,15 @@ package com.xmz.netty.client;
 import com.xmz.netty.client.console.ConsoleCommandManager;
 import com.xmz.netty.client.console.LoginConsoleCommand;
 import com.xmz.netty.client.handler.CreateGroupResponseHandler;
+import com.xmz.netty.client.handler.JoinGroupResponseHandler;
+import com.xmz.netty.client.handler.ListGroupMembersResponseHandler;
 import com.xmz.netty.client.handler.LoginResponseHandler;
 import com.xmz.netty.client.handler.LogoutResponseHandler;
 import com.xmz.netty.client.handler.MessageResponseHandler;
+import com.xmz.netty.client.handler.QuitGroupResponseHandler;
 import com.xmz.netty.codec.PacketDecoder;
 import com.xmz.netty.codec.PacketEncoder;
-import com.xmz.netty.protocol.request.LoginRequestPacket;
-import com.xmz.netty.protocol.request.MessageRequestPacket;
 import com.xmz.netty.server.Spliter;
-import com.xmz.netty.util.LoginUtil;
 import com.xmz.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -51,10 +51,20 @@ public class NettyClient {
 								protected void initChannel(SocketChannel ch) throws Exception {
 										ch.pipeline().addLast(new Spliter());
 										ch.pipeline().addLast(new PacketDecoder());
+										// 登录响应处理器
 										ch.pipeline().addLast(new LoginResponseHandler());
-										ch.pipeline().addLast(new LogoutResponseHandler());
+										// 收消息处理器
 										ch.pipeline().addLast(new MessageResponseHandler());
+										// 创建群响应处理器
 										ch.pipeline().addLast(new CreateGroupResponseHandler());
+										// 加群响应处理器
+										ch.pipeline().addLast(new JoinGroupResponseHandler());
+										// 退群响应处理器
+										ch.pipeline().addLast(new QuitGroupResponseHandler());
+										// 获取群成员响应处理器
+										ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+										// 登出响应处理器
+										ch.pipeline().addLast(new LogoutResponseHandler());
 										ch.pipeline().addLast(new PacketEncoder());
 								}
 						});
