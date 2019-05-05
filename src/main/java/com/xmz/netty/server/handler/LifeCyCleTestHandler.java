@@ -1,4 +1,4 @@
-package com.xmz.netty.server;
+package com.xmz.netty.server.handler;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;

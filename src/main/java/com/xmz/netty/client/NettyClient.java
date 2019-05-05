@@ -1,11 +1,18 @@
 package com.xmz.netty.client;
 
+import com.xmz.netty.client.console.ConsoleCommandManager;
+import com.xmz.netty.client.console.LoginConsoleCommand;
+import com.xmz.netty.client.handler.CreateGroupResponseHandler;
 import com.xmz.netty.client.handler.LoginResponseHandler;
+import com.xmz.netty.client.handler.LogoutResponseHandler;
 import com.xmz.netty.client.handler.MessageResponseHandler;
 import com.xmz.netty.codec.PacketDecoder;
 import com.xmz.netty.codec.PacketEncoder;
+import com.xmz.netty.protocol.request.LoginRequestPacket;
 import com.xmz.netty.protocol.request.MessageRequestPacket;
+import com.xmz.netty.server.Spliter;
 import com.xmz.netty.util.LoginUtil;
+import com.xmz.netty.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -42,9 +49,12 @@ public class NettyClient {
 						.handler(new ChannelInitializer<SocketChannel>() {
 								@Override
 								protected void initChannel(SocketChannel ch) throws Exception {
+										ch.pipeline().addLast(new Spliter());
 										ch.pipeline().addLast(new PacketDecoder());
 										ch.pipeline().addLast(new LoginResponseHandler());
+										ch.pipeline().addLast(new LogoutResponseHandler());
 										ch.pipeline().addLast(new MessageResponseHandler());
+										ch.pipeline().addLast(new CreateGroupResponseHandler());
 										ch.pipeline().addLast(new PacketEncoder());
 								}
 						});
@@ -72,19 +82,26 @@ public class NettyClient {
 		}
 
 		private static void startConsoleThread(Channel channel) {
+				ConsoleCommandManager consoleCommandManager = new ConsoleCommandManager();
+				LoginConsoleCommand loginConsoleCommand = new LoginConsoleCommand();
+				Scanner scanner = new Scanner(System.in);
+
 				new Thread(() -> {
 						while (!Thread.interrupted()) {
-								if (LoginUtil.hasLogin(channel)) {
-										System.out.println("输入消息发送至服务端: ");
-										Scanner sc = new Scanner(System.in);
-										String line = sc.nextLine();
-
-										MessageRequestPacket packet = new MessageRequestPacket();
-										packet.setMessage(line);
-										channel.writeAndFlush(packet);
+								if (!SessionUtil.hasLogin(channel)) {
+										loginConsoleCommand.exec(scanner, channel);
+								} else {
+										consoleCommandManager.exec(scanner, channel);
 								}
 						}
 				}).start();
+		}
+
+		private static void waitForLoginResponse() {
+				try {
+						Thread.sleep(1000);
+				} catch (InterruptedException ignored) {
+				}
 		}
 
 }

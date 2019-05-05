@@ -1,13 +1,21 @@
 package com.xmz.netty.protocol;
 
+import static com.xmz.netty.protocol.command.Command.CREATE_GROUP_REQUEST;
+import static com.xmz.netty.protocol.command.Command.CREATE_GROUP_RESPONSE;
 import static com.xmz.netty.protocol.command.Command.LOGIN_REQUEST;
 import static com.xmz.netty.protocol.command.Command.LOGIN_RESPONSE;
+import static com.xmz.netty.protocol.command.Command.LOGOUT_REQUEST;
+import static com.xmz.netty.protocol.command.Command.LOGOUT_RESPONSE;
 import static com.xmz.netty.protocol.command.Command.MESSAGE_REQUEST;
 import static com.xmz.netty.protocol.command.Command.MESSAGE_RESPONSE;
 
+import com.xmz.netty.protocol.request.CreateGroupRequestPacket;
 import com.xmz.netty.protocol.request.LoginRequestPacket;
+import com.xmz.netty.protocol.request.LogoutRequestPacket;
 import com.xmz.netty.protocol.request.MessageRequestPacket;
+import com.xmz.netty.protocol.response.CreateGroupResponsePacket;
 import com.xmz.netty.protocol.response.LoginResponsePacket;
+import com.xmz.netty.protocol.response.LogoutResponsePacket;
 import com.xmz.netty.protocol.response.MessageResponsePacket;
 import com.xmz.netty.serialize.Serializer;
 import com.xmz.netty.serialize.impl.JSONSerializer;
@@ -38,6 +46,10 @@ public class PacketCodeC {
 				packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
 				packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
 				packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+				packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+				packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+				packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+				packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
 
 
 				serializerMap = new HashMap<>();

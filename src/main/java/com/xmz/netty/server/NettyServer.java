@@ -2,7 +2,10 @@ package com.xmz.netty.server;
 
 import com.xmz.netty.codec.PacketDecoder;
 import com.xmz.netty.codec.PacketEncoder;
+import com.xmz.netty.server.handler.AuthHandler;
+import com.xmz.netty.server.handler.CreateGroupRequestHandler;
 import com.xmz.netty.server.handler.LoginRequestHandler;
+import com.xmz.netty.server.handler.LogoutRequestHandler;
 import com.xmz.netty.server.handler.MessageRequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -37,11 +40,13 @@ public class NettyServer {
 						.childHandler(new ChannelInitializer<NioSocketChannel>() {
 								@Override
 								protected void initChannel(NioSocketChannel ch) {
-										ch.pipeline().addLast(new LifeCyCleTestHandler());
 										ch.pipeline().addLast(new Spliter());
 										ch.pipeline().addLast(new PacketDecoder());
 										ch.pipeline().addLast(new LoginRequestHandler());
+										ch.pipeline().addLast(new AuthHandler());
 										ch.pipeline().addLast(new MessageRequestHandler());
+										ch.pipeline().addLast(new CreateGroupRequestHandler());
+										ch.pipeline().addLast(new LogoutRequestHandler());
 										ch.pipeline().addLast(new PacketEncoder());
 								}
 						});
