@@ -5,6 +5,7 @@ import com.xmz.netty.codec.PacketEncoder;
 import com.xmz.netty.server.handler.AuthHandler;
 import com.xmz.netty.server.handler.CreateGroupRequestHandler;
 import com.xmz.netty.server.handler.GroupMessageRequestHandler;
+import com.xmz.netty.server.handler.HeartBeatRequestHandler;
 import com.xmz.netty.server.handler.JoinGroupRequestHandler;
 import com.xmz.netty.server.handler.ListGroupMembersRequestHandler;
 import com.xmz.netty.server.handler.LoginRequestHandler;
@@ -48,6 +49,7 @@ public class NettyServer {
 										ch.pipeline().addLast(new PacketDecoder());
 										// 登录请求处理器
 										ch.pipeline().addLast(new LoginRequestHandler());
+										ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
 										ch.pipeline().addLast(new AuthHandler());
 										// 单聊消息请求处理器
 										ch.pipeline().addLast(new MessageRequestHandler());

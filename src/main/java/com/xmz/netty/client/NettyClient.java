@@ -4,6 +4,7 @@ import com.xmz.netty.client.console.ConsoleCommandManager;
 import com.xmz.netty.client.console.LoginConsoleCommand;
 import com.xmz.netty.client.handler.CreateGroupResponseHandler;
 import com.xmz.netty.client.handler.GroupMessageResponseHandler;
+import com.xmz.netty.client.handler.HeartBeatTimerHandler;
 import com.xmz.netty.client.handler.JoinGroupResponseHandler;
 import com.xmz.netty.client.handler.ListGroupMembersResponseHandler;
 import com.xmz.netty.client.handler.LoginResponseHandler;
@@ -69,6 +70,9 @@ public class NettyClient {
 										// 登出响应处理器
 										ch.pipeline().addLast(new LogoutResponseHandler());
 										ch.pipeline().addLast(new PacketEncoder());
+
+										// 心跳定时器
+										ch.pipeline().addLast(new HeartBeatTimerHandler());
 								}
 						});
 				connect(bootstrap, HOST, PORT, MAX_RETRY);
